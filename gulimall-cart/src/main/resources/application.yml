@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: gulimall-cart-service
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+  web:
+    resources:
+      static-locations: classpath:/templates/
+server:
+  port: 50000
+
+
+
+

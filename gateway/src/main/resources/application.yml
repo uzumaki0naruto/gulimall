@@ -1,0 +1,107 @@
+server:
+  port: 88
+spring:
+  application:
+    name: CLOUD-GATEWAY
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true   #开启从注册中心动态创建路由的功能，利用微服务名进行路由
+      routes:
+            - id: product      #路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: lb://gulimall-product   #匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Path=/api/product/**          #断言，路径相匹配的进行路由
+              filters:
+                - RewritePath=/api/product(?<segment>/?.*),/product/$\{segment}
+
+            - id: product      #路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: lb://gulimall-member   #匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Path=/api/member/**          #断言，路径相匹配的进行路由
+              filters:
+                - RewritePath=/api/member(?<segment>/?.*),/member/$\{segment}
+
+            - id: product      #路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: lb://gulimall-order   #匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Path=/api/order/**          #断言，路径相匹配的进行路由
+              filters:
+                - RewritePath=/api/order(?<segment>/?.*),/order/$\{segment}
+
+            - id: product      #路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: lb://gulimall-ware   #匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Path=/api/ware/**          #断言，路径相匹配的进行路由
+              filters:
+                - RewritePath=/api/ware(?<segment>/?.*),/ware/$\{segment}
+
+            - id: test      #路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: https://www.baidu.com   #匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Query=url,baidu          #断言，路径相匹配的进行路由
+
+            - id: third_party   #payment_routh    路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: lb://thirdParty   #lb是负载的意思，匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Path=/api/thirdparty/**          #断言机制，路径相匹配的进行路由
+              filters:
+                - RewritePath=/api/thirdparty(?<segment>/?.*),/thirdparty/$\{segment}
+
+            - id: admin_route   #payment_routh    路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: lb://renren-fast   #lb是负载的意思，匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Path=/api/**          #断言机制，路径相匹配的进行路由
+              filters:
+                - RewritePath=/api(?<segment>/?.*),/renren-fast/$\{segment}
+
+            - id: gulimall-host-route         #路由的ID，没有固定规则但要求唯一，简易配合服务名
+              uri: lb://gulimall-product   #匹配后提供服务的路由地址，lb后跟提供服务的微服务的名，不要写错uri: http://localhost:8001
+              predicates:
+                - Host=gulimall.com          #断言，路径相匹配的进行路由
+
+            - id: gulimall-search
+              uri: lb://gulimall-search
+              predicates:
+                - Host=search.gulimall.com
+
+            - id: gulimall-auth-server-router
+              uri: lb://gulimall-auth-server
+              predicates:
+                - Host=auth.gulimall.com
+
+            - id: gulimall-auth-server-router
+              uri: lb://gulimall-cart-service
+              predicates:
+                - Host=cart.gulimall.com
+
+            - id: gulimall-member-server-router
+              uri: lb://gulimall-member-server
+              predicates:
+                - Host=member.gulimall.com
+
+            - id: gulimall-seckill-server-router
+              uri: lb://gulimall-seckill-server
+              predicates:
+                - Host=seckill.gulimall.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

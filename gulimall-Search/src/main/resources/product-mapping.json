@@ -1,0 +1,103 @@
+## 一、商品上架
+
+上架的商品才可以在网站展示。
+
+上架的商品需要可以被检索。
+
+1、商品Mapping
+
+分析:商品上架在es中是存sku还是spu？
+
+1）、检索的时候输入名字，是需要按照sku的title进行全文检索的
+
+2）、检索使用商品规格，规格是spu的公共属性，每个spu是一样的
+
+3）、按照分类id进去的都是直接列出spu的，还可以切换。
+
+4）、我们如果将sku的全量信息保存到es中(包括spu属性）就太多量字段了。
+
+5）、我们如果将spu以及他包含的sku信息保存到es中，也可以方便检索。
+但是sku属于spu的级联对象，在es中需要nested模型，这种性能差点。
+
+6）、但是存储与检索我们必须性能折中。
+7）、如果我们分拆存储，spu和attr一个索引，sku单独一个索引可能涉及的问题。
+检索商品的名字，如“手机”，对应的spu有很多，我们要分析出这些spu的所有关联属性，再做一次查询，
+就必须将所有spuid都发出去。假设有1万个数据，数据传输一次就10000*4=4MB;
+并发情况下假设1000检索请求，那就是4GB的数据，传输阻寒时间会很长，业务更加无法继续。
+
+所以，我们如下设计，这样才是文档区别于关系型数据库的地方，宽表设计，不能去考虑数据库范式。
+
+1）、PUT product
+```json
+PUT product
+{
+  "mappings": {
+    "properties": {
+      "skuId": {
+        "type": "long"
+      },
+      "spuId": {
+        "type": "keyword"
+      },
+      "skuTitle": {
+        "type": "text",
+        "analyzer": "ik_smart"
+      },
+      "skuPrice": {
+        "type": "keyword"
+      },
+      "skuImg": {
+        "type": "keyword",
+        "index": false,//表示不被检索
+        "doc_values": false//不需要聚合
+      },
+      "saleCount": {
+        "type": "long"
+      },
+      "hasStock": {
+        "type": "boolean"
+      },
+      "hotScore": {
+        "type": "long"
+      },
+      "brandId": {
+        "type": "long"
+      },
+      "catalogId": {
+        "type": "long"
+      },
+      "brandName": {
+        "type": "keyword",
+        "index": false,
+        "doc_values": false
+      },
+      "brandImg": {
+        "type": "keyword",
+        "index": false,
+        "doc_values": false
+      },
+      "catalogName": {
+        "type": "keyword",
+        "index": false,
+        "doc_values": false
+      },
+      "attrs": {
+        "type": "nested",//嵌入式的，很重要
+        "properties": {
+          "attrId": {
+            "type": "long"
+          },
+          "attrName": {
+            "type": "keyword",
+            "index": false,
+            "doc_values": false
+          },
+          "attrValue": {
+            "type": "keyword"
+          }
+        }
+      }
+    }
+  }
+}
+```

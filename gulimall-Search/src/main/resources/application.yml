@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/gulimall_pms?serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  application:
+    name: gulimall-search
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+  web:
+    resources:
+      static-locations: classpath:/templates/
+#  cache:
+#    type: redis
+#    redis:
+#      cache-null-values: true
+#      #      key-prefix: Cate_
+#      use-key-prefix: true
+#      time-to-live: 3600000
+server:
+  port: 12000
+

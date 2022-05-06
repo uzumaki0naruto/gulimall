@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/gulimall_sms?serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true   #是否允许缓存空值
+      #      key-prefix: Cate_  #缓存key的前缀  ,禁用后就是分区名作为前缀，方便统一删除
+      use-key-prefix: true #是否使用key前缀，默认是true
+#      time-to-live: 3600000 #过期时间
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:8333
+      eager: true
+  application:
+    name: gulimall-seckill-server
+mybatis-plus:
+#  mapper-locations: classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+server:
+  port: 25000
+
+
+
+
+

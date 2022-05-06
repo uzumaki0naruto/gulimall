@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/gulimall_oms?serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: gulimall-order
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+server:
+  port: 9010
+
+seata:
+  enabled: true
+  application-id: ${spring.application.name}-seata
+  enable-auto-data-source-proxy: true
+  tx-service-group: gulimall-order
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: ${spring.cloud.nacos.discovery.server-addr}
+      namespace: public
+
+  service:
+    vgroup-mapping:
+      gulimall-order: default
+    disable-global-transaction: false
+
+

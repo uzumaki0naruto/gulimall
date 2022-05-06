@@ -1,0 +1,68 @@
+#spring:
+#  datasource:
+#    username: root
+#    password: 123456
+#    url: jdbc:mysql://localhost:3306/gulimall_pms
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
+#    alicloud:
+#      access-key: LTAI4G7T8bBXzN1XojhXQiaG
+#      secret-key: c9pgzcL7Kmi1MidI632FszYkAP9t37
+#      oss:
+#        endpoint: oss-cn-hangzhou.aliyuncs.com
+#  application:
+#    name: gulimall-product
+#mybatis-plus:
+#  mapper-locations: classpath:/mapper/**/*.xml
+#  global-config:
+#    db-config:
+#      id-type: auto
+#      logic-delete-value: 1
+#      logic-not-delete-value: 0
+#server:
+#  port: 10000
+#
+#logging:
+#  level:
+#    com.atguigu.gulimall: debug
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/gulimall_pms?serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  application:
+    name: gulimall-product
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+
+  web:
+    resources:
+      static-locations: classpath:/templates/
+
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true   #是否允许缓存空值
+#      key-prefix: Cate_  #缓存key的前缀  ,禁用后就是分区名作为前缀，方便统一删除
+      use-key-prefix: true #是否使用key前缀，默认是true
+      time-to-live: 3600000 #过期时间
+server:
+  port: 10000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include=*:

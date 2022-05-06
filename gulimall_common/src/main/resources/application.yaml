@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/gulimall_admin
+    driver-class-name: com.mysql.jdbc.Driver
+  application:
+    name: gulimall_product
+
+
+  redis:
+    host: 192.168.164.132
+    port: 6379
+    password: haohaoxue123
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+    lettuce:
+      shutdown-timeout: 10
+
+
+
+
+mybatis-plus:
+
+  global-config:
+    db-config:
+      id-type: auto
+
